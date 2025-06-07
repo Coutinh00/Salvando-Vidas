@@ -1,0 +1,63 @@
+@model AbrigoHub.Web.Models.WeatherResponse
+@{
+    ViewData["Title"] = "Página Inicial";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Bem-vindo ao AbrigoHub</h1>
+    <p class="lead">Sistema de gerenciamento de abrigos de emergência</p>
+</div>
+
+@if (Model != null)
+{
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Clima em @Model.Name</h5>
+                    @if (Model.Weather != null && Model.Weather.Any())
+                    {
+                        var weather = Model.Weather.First();
+                        <img src="http://openweathermap.org/img/wn/@weather.Icon@2x.png" alt="@weather.Description" />
+                        <p class="card-text">@weather.Description</p>
+                    }
+                    <p class="card-text">
+                        <strong>Temperatura:</strong> @Model.Main.Temp°C<br />
+                        <strong>Sensação:</strong> @Model.Main.Feels_like°C<br />
+                        <strong>Umidade:</strong> @Model.Main.Humidity%
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Abrigos</h5>
+                <p class="card-text">Gerencie os abrigos cadastrados no sistema.</p>
+                <a asp-controller="Abrigos" asp-action="Index" class="btn btn-primary">Ver Abrigos</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Doações</h5>
+                <p class="card-text">Acompanhe as doações recebidas pelos abrigos.</p>
+                <a href="#" class="btn btn-primary">Ver Doações</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Necessidades</h5>
+                <p class="card-text">Veja as necessidades urgentes dos abrigos.</p>
+                <a href="#" class="btn btn-primary">Ver Necessidades</a>
+            </div>
+        </div>
+    </div>
+</div> 

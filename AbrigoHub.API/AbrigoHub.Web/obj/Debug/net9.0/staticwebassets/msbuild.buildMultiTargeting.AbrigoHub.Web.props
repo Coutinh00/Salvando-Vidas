@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\AbrigoHub.Web.props" />
+</Project>

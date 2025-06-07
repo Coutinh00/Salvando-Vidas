@@ -1,0 +1,17 @@
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\bin\Debug\net8.0\AbrigoHub.Infrastructure.deps.json
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\bin\Debug\net8.0\AbrigoHub.Infrastructure.runtimeconfig.json
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\bin\Debug\net8.0\AbrigoHub.Infrastructure.dll
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\bin\Debug\net8.0\AbrigoHub.Infrastructure.pdb
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\bin\Debug\net8.0\AbrigoHub.Core.dll
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\bin\Debug\net8.0\AbrigoHub.Core.pdb
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\obj\Debug\net8.0\AbrigoHub.Infrastructure.csproj.AssemblyReference.cache
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\obj\Debug\net8.0\AbrigoHub.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\obj\Debug\net8.0\AbrigoHub.Infrastructure.AssemblyInfoInputs.cache
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\obj\Debug\net8.0\AbrigoHub.Infrastructure.AssemblyInfo.cs
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\obj\Debug\net8.0\AbrigoHub.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\obj\Debug\net8.0\AbrigoHu.D2992E99.Up2Date
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\obj\Debug\net8.0\AbrigoHub.Infrastructure.dll
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\obj\Debug\net8.0\refint\AbrigoHub.Infrastructure.dll
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\obj\Debug\net8.0\AbrigoHub.Infrastructure.pdb
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\obj\Debug\net8.0\AbrigoHub.Infrastructure.genruntimeconfig.cache
+C:\Fiap\Salvando-Vidas\AbrigoHub.Infrastructure\obj\Debug\net8.0\ref\AbrigoHub.Infrastructure.dll
