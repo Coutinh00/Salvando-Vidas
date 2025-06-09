@@ -1,5 +1,10 @@
 # AbrigoHub: Sistema de Gerenciamento de Abrigos de Emergência
 
+## Repositório
+- Link do GitHub: [https://github.com/Coutinh00/Salvando-Vidas](https://github.com/Coutinh00/Salvando-Vidas)
+- Branch principal: `main`
+- Última atualização: [Data da última atualização]
+
 ## Sumário
 - [Descrição do Projeto](#descrição-do-projeto)
   - [Visão Geral](#visão-geral)
@@ -43,6 +48,25 @@ graph TD
     D -->|Requisições HTTP| F(OpenWeather API)
     E -->|Acessa Banco de Dados| G(Oracle Database)
     E -->|Migrações & Seed Data| G
+```
+
+### Diagrama de Fluxo de Dados
+
+```mermaid
+sequenceDiagram
+    participant U as Usuário
+    participant W as Web MVC
+    participant A as API REST
+    participant D as Database
+    participant W as Weather API
+
+    U->>W: Acessa Interface
+    W->>A: Requisição HTTP
+    A->>D: Consulta Dados
+    D-->>A: Retorna Dados
+    A-->>W: Resposta JSON
+    W->>W: Consulta Clima
+    W-->>U: Renderiza View
 ```
 
 **Explicação do Diagrama:**
@@ -141,9 +165,22 @@ dotnet ef database update
 ## Testes
 
 ### Estratégia de Testes
-- Testes unitários para lógica de negócio
-- Testes de integração para APIs
-- Testes de UI para interface web
+O projeto implementa uma estratégia de testes em três níveis:
+
+1. **Testes Unitários**
+   - Testes de serviços
+   - Testes de repositórios
+   - Testes de validações
+
+2. **Testes de Integração**
+   - Testes de API
+   - Testes de banco de dados
+   - Testes de serviços externos
+
+3. **Testes de UI**
+   - Testes de interface
+   - Testes de navegação
+   - Testes de formulários
 
 ### Testes Unitários
 Exemplo de teste unitário para o serviço de abrigos:
@@ -190,146 +227,126 @@ public async Task GetAbrigos_DeveRetornarListaDeAbrigos()
 }
 ```
 
-## Desenvolvimento
+### Testes de UI
+Exemplo de teste de interface:
 
-### Tecnologias Utilizadas
-- **Backend**: ASP.NET Core 8.0
-- **Banco de Dados**: Oracle Database
-- **ORM**: Entity Framework Core 8.0 com provedor Oracle (Oracle.EntityFrameworkCore 8.21.121)
-- **Interface Web**: ASP.NET Core MVC com Razor Views, Bootstrap, jQuery.
-- **Integração Externa**: OpenWeather API
-- **Controle de Versão**: Git
+```csharp
+[Fact]
+public async Task CriarAbrigo_DeveRedirecionarParaLista()
+{
+    // Arrange
+    var client = _factory.CreateClient();
+    var formData = new Dictionary<string, string>
+    {
+        { "Nome", "Novo Abrigo" },
+        { "Endereco", "Rua Teste" },
+        { "UsuarioId", "1" }
+    };
 
-### Estrutura do Projeto
-A solução `Salvando-Vidas` é organizada nos seguintes projetos:
+    // Act
+    var response = await client.PostAsync("/Abrigos/Create", new FormUrlEncodedContent(formData));
 
-- `AbrigoHub.sln`: Arquivo de solução que contém todos os projetos.
-- `AbrigoHub.Core`: Contém as entidades de domínio (modelos POCO) e interfaces para a lógica de negócio.
-    - `Entities/`: Classes que representam as tabelas do banco de dados (e.g., `Abrigo`, `Usuario`, `Doacao`).
-- `AbrigoHub.Infrastructure`: Camada de acesso a dados.
-    - `Data/`: `DbContext` (`AbrigoHubContext`) e `DbContextFactory` para design-time.
-    - `Migrations/`: Arquivos de migração do Entity Framework Core.
-    - `SeedData.cs`: Lógica para popular o banco de dados com dados iniciais.
-- `AbrigoHub.API`: Projeto da API RESTful.
-    - `Controllers/`: Controladores da API para as entidades.
-    - `Program.cs`: Configuração da API, injeção de dependência, Swagger.
-- `AbrigoHub.Web`: Projeto da aplicação web ASP.NET Core MVC.
-    - `Controllers/`: Controladores MVC para as views.
-    - `Models/`: Modelos de View e modelos para a API externa (e.g., `WeatherModels.cs`).
-    - `Services/`: Serviços de aplicação (e.g., `WeatherService.cs` para integração com OpenWeather).
-    - `Views/`: Arquivos `.cshtml` (Razor Views) para a interface do usuário.
-    - `wwwroot/`: Arquivos estáticos (CSS, JavaScript, imagens).
-    - `appsettings.json`: Configurações da aplicação, incluindo string de conexão do banco de dados e chave da API OpenWeather.
-    - `Program.cs`: Configuração da aplicação web, injeção de dependência.
-    - `Properties/launchSettings.json`: Configurações de inicialização do projeto (porta, etc.).
-
-### Configuração do Ambiente
-
-1.  **Pré-requisitos:**
-    *   .NET SDK 8.0 ou superior.
-    *   Cliente Oracle para acesso ao banco de dados Oracle.
-    *   Git para clonar o repositório.
-
-2.  **Configuração do Banco de Dados:**
-    *   Certifique-se de ter uma instância do Oracle Database acessível.
-    *   Atualize a string de conexão no `appsettings.json` do projeto `AbrigoHub.API/AbrigoHub.Web/` para apontar para o seu banco de dados Oracle.
-        ```json
-        "ConnectionStrings": {
-          "DefaultConnection": "DATA SOURCE=seu_servidor:sua_porta/seu_servico;USER ID=seu_usuario;PASSWORD=sua_senha;"
-        }
-        ```
-    *   Aplique as migrações do Entity Framework Core para criar o esquema do banco de dados e popular os dados iniciais:
-        ```bash
-        dotnet ef database update --project AbrigoHub.Infrastructure/AbrigoHub.Infrastructure.csproj --startup-project AbrigoHub.API/AbrigoHub.Web/AbrigoHub.Web.csproj
-        ```
-
-3.  **Configuração da API OpenWeather:**
-    *   Obtenha uma chave de API gratuita no [OpenWeatherMap](https://openweathermap.org/api).
-    *   Adicione sua chave de API ao `appsettings.json` do projeto `AbrigoHub.API/AbrigoHub.Web/`:
-        ```json
-        "OpenWeather": {
-          "ApiKey": "SUA_CHAVE_API_OPENWEATHER",
-          "BaseUrl": "http://api.openweathermap.org/data/2.5/"
-        }
-        ```
+    // Assert
+    Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+    Assert.StartsWith("/Abrigos", response.Headers.Location.ToString());
+}
+```
 
 ## Testes e Acesso à Aplicação
 
 ### Como Rodar a Aplicação
 
-1.  **Navegue até o diretório raiz da solução:**
-    ```bash
-    cd C:\Fiap\Salvando-Vidas
-    ```
-2.  **Inicie a aplicação web:**
-    ```bash
-    dotnet run --project AbrigoHub.API/AbrigoHub.Web/AbrigoHub.Web.csproj
-    ```
-    A aplicação será iniciada e você verá mensagens no terminal indicando a URL (por exemplo, `http://localhost:5160`).
+1. **Clone o Repositório**
+   ```bash
+   git clone https://github.com/Coutinh00/Salvando-Vidas.git
+   cd Salvando-Vidas
+   ```
+
+2. **Restauração de Pacotes**
+   ```bash
+   dotnet restore
+   ```
+
+3. **Configuração do Banco de Dados**
+   - Atualize a string de conexão em `appsettings.json`
+   - Execute as migrações:
+     ```bash
+     dotnet ef database update
+     ```
+
+4. **Execução da Aplicação**
+   ```bash
+   dotnet run --project AbrigoHub.Web
+   ```
 
 ### Instruções de Navegação e Uso
 
-Após iniciar a aplicação, abra seu navegador e acesse a URL fornecida (geralmente `http://localhost:5160`).
+1. **Acesso à Aplicação**
+   - URL: `http://localhost:5160`
+   - Credenciais padrão:
+     - Usuário: admin@abrigohub.com
+     - Senha: Admin@123
 
-1.  **Página Inicial (Home):**
-    *   A tela inicial (`/Home/Index`) exibirá dados do clima para "São Paulo", se a integração com o OpenWeather estiver configurada corretamente.
-    *   Você encontrará um link na barra de navegação para "Abrigos".
-
-2.  **Tela de Abrigos:**
-    *   Acesse a tela de abrigos clicando no link "Abrigos" na barra de navegação ou navegando diretamente para `/Abrigos`.
-    *   Você deve ver uma lista dos abrigos pré-cadastrados (se o `SeedData` foi executado com sucesso).
-
-3.  **CRUD de Abrigos:**
-    *   **Visualizar Detalhes (Details):** Clique no link "Detalhes" ao lado de um abrigo na lista para ver informações mais detalhadas.
-    *   **Editar Abrigo (Edit):**
-        *   Clique no link "Editar" ao lado de um abrigo.
-        *   Na tela de edição, altere os campos desejados (Nome, Descrição, Endereço, etc.).
-        *   **Certifique-se de que o campo "Usuário" esteja selecionado**, pois é um campo obrigatório. Você precisará de pelo menos um usuário no banco de dados (gerado pelo `SeedData`).
-        *   Clique em "Salvar" para persistir as alterações.
-        *   Se houver problemas ao salvar, verifique a saída do terminal para mensagens de log (que adicionei para depuração) ou erros do `ModelState`.
-    *   **Criar Novo Abrigo (Create):**
-        *   Clique no botão "Novo" na tela de Abrigos.
-        *   Preencha todos os campos obrigatórios.
-        *   **Selecione um "Usuário"** na lista suspensa.
-        *   Clique em "Criar" para adicionar o novo abrigo.
-    *   **Excluir Abrigo (Delete):**
-        *   Clique no link "Excluir" ao lado de um abrigo.
-        *   Na tela de confirmação, clique em "Excluir" novamente para remover o abrigo.
-        *   Verifique se o abrigo foi removido da lista.
+2. **Funcionalidades Principais**
+   - Cadastro de Abrigos
+   - Gerenciamento de Usuários
+   - Registro de Doações
+   - Avaliação de Abrigos
 
 ### Exemplos de Testes
 
-Para validar o funcionamento da aplicação, você pode seguir estes exemplos:
+1. **Teste de Cadastro de Abrigo**
+   ```http
+   POST /api/abrigos
+   Content-Type: application/json
 
-1.  **Verificar dados pré-cadastrados:**
-    *   Após iniciar a aplicação e acessar `/Abrigos`, confirme que os abrigos criados pelo `SeedData` (e.g., "Abrigo Esperança", "Abrigo Aconchego") estão visíveis na lista.
+   {
+     "nome": "Abrigo Teste",
+     "endereco": "Rua Teste, 123",
+     "cidade": "São Paulo",
+     "estado": "SP",
+     "cep": "01000-000",
+     "capacidade": 50,
+     "usuarioId": 1
+   }
+   ```
 
-2.  **Editar um abrigo existente:**
-    *   Na página `/Abrigos`, clique em "Editar" para "Abrigo Esperança".
-    *   Altere o campo "Descrição" para "Um local seguro para famílias em momentos de crise, com capacidade ampliada.".
-    *   Clique em "Salvar".
-    *   Volte para a lista de abrigos e verifique se a descrição foi atualizada.
+2. **Teste de Consulta de Abrigos**
+   ```http
+   GET /api/abrigos
+   Authorization: Bearer {seu_token}
+   ```
 
-3.  **Criar um novo abrigo:**
-    *   Na página `/Abrigos`, clique em "Novo".
-    *   Preencha os seguintes dados:
-        *   **Nome**: "Novo Abrigo Teste"
-        *   **Descricao**: "Abrigo criado para teste de funcionalidade."
-        *   **Endereco**: "Rua dos Testes, 123"
-        *   **Cidade**: "São Paulo"
-        *   **Estado**: "SP"
-        *   **Cep**: "01000-000"
-        *   **Capacidade**: 50
-        *   **OcupacaoAtual**: 0
-        *   **Status**: "Ativo"
-        *   **Usuário**: Selecione "Admin" (ou o usuário que você seeded).
-        *   **Latitude**: -23.5505 (ou qualquer valor)
-        *   **Longitude**: -46.6333 (ou qualquer valor)
-    *   Clique em "Criar".
-    *   Verifique se "Novo Abrigo Teste" aparece na lista de abrigos.
+3. **Teste de Atualização de Abrigo**
+   ```http
+   PUT /api/abrigos/1
+   Content-Type: application/json
 
-4.  **Excluir um abrigo:**
-    *   Na página `/Abrigos`, localize o "Novo Abrigo Teste" que você criou.
-    *   Clique em "Excluir" ao lado dele.
-    *   Confirme a exclusão na próxima tela.
-    *   Verifique se o abrigo foi removido da lista.
+   {
+     "nome": "Abrigo Teste Atualizado",
+     "capacidade": 100
+   }
+   ```
+
+4. **Teste de Exclusão de Abrigo**
+   ```http
+   DELETE /api/abrigos/1
+   Authorization: Bearer {seu_token}
+   ```
+
+### Executando os Testes
+
+1. **Testes Unitários**
+   ```bash
+   dotnet test AbrigoHub.Tests
+   ```
+
+2. **Testes de Integração**
+   ```bash
+   dotnet test AbrigoHub.IntegrationTests
+   ```
+
+3. **Testes de UI**
+   ```bash
+   dotnet test AbrigoHub.UITests
+   ```
